@@ -12,16 +12,13 @@ import java.util.logging.Logger;
 import org.apache.commons.codec.binary.Base64;
 
 import upload.bacoder.coding.bean.Person;
-import upload.bacoder.coding.bean.Photo;
 
 public class UploadUtil {
 	Logger logger = Logger.getLogger(UploadUtil.class.getSimpleName());
 	
 	public String setPhoto(String path, String imgEncodedStr, String fileName, int patientId) {
-		logger.info(path);
-		
 		StringBuilder photoUrl = new StringBuilder();
-		photoUrl.append("http://www.bacoder.kr/upload/").append("/");
+		photoUrl.append("http://upload.bacoder.kr/");
 		String ext = fileName.substring(fileName.lastIndexOf("."));
 		String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA).format(new Date());
 		

@@ -1,17 +1,13 @@
-<%@page import="upload.bacoder.coding.bean.Photo"%>
+<%@page import="org.json.simple.JSONObject"%>
 <%@page import="upload.bacoder.coding.dev.UploadUtil"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="upload.bacoder.coding.db.DBconn"%>
+<%@page import="upload.bacoder.coding.bean.Photo"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="org.json.JSONObject"%>
-<%@page import="java.io.File"%>
-<%@page import="java.io.IOException"%>
-<%@page import="java.io.FileNotFoundException"%>
-<%@page import="java.io.FileOutputStream"%>
-<%@page import="org.apache.commons.codec.binary.Base64"%>
 <%@page import="java.util.logging.Logger"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <%
 	final String path = getServletContext().getRealPath("/img");
 	Logger logger = Logger.getLogger("addPhoto.jsp");

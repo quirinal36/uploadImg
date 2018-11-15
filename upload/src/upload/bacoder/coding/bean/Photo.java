@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 public class Photo {
     private int photoId;

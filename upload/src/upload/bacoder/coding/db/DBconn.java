@@ -9,8 +9,7 @@ import java.sql.Statement;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.json.simple.JSONArray;
 
 import upload.bacoder.coding.bean.Person;
 import upload.bacoder.coding.bean.Photo;
@@ -92,19 +91,18 @@ public class DBconn {
 		int result = 0;
 		try(Connection conn = getConnection()){
 			String sql = "INSERT INTO PhotoInfo "
-					+ "(patientId, patientName, photoUrl, classification, doctor, date, uploader, comment, accessLv) "
-					+ "VALUES (?,?,?,?,?,?,?,?,?)";
+					+ "(patientId, photoUrl, classification, doctor, date, uploader, comment, accessLv) "
+					+ "VALUES (?,?,?,?,?,?,?,?)";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, photoInfo.getPatientId());
-			pstmt.setString(2, photoInfo.getPatientName());
-			pstmt.setString(3, photoInfo.getPhotoUrl());
-			pstmt.setString(4, photoInfo.getClassification());
-			pstmt.setString(5, photoInfo.getDoctor());
-			pstmt.setString(6, photoInfo.getDate());
-			pstmt.setString(7, photoInfo.getUploader());
-			pstmt.setString(8, photoInfo.getComment());
-			pstmt.setInt(9, photoInfo.getAccessLv());
+			pstmt.setInt(1, photoInfo.getPatientId());			
+			pstmt.setString(2, photoInfo.getPhotoUrl());
+			pstmt.setString(3, photoInfo.getClassification());
+			pstmt.setString(4, photoInfo.getDoctor());
+			pstmt.setString(5, photoInfo.getDate());
+			pstmt.setString(6, photoInfo.getUploader());
+			pstmt.setString(7, photoInfo.getComment());
+			pstmt.setInt(8, photoInfo.getAccessLv());
 			result= pstmt.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -122,7 +120,7 @@ public class DBconn {
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()) {
 				Photo p = Photo.makePhoto(rs);
-				result.put(Photo.parseJSON(p));
+				result.add(Photo.parseJSON(p));
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
