@@ -18,7 +18,7 @@ public class UploadUtil {
 	
 	public String setPhoto(String path, String imgEncodedStr, String fileName, int patientId) {
 		StringBuilder photoUrl = new StringBuilder();
-		photoUrl.append("http://upload.bacoder.kr/");
+		photoUrl.append("http://upload.bacoder.kr/img/");
 		String ext = fileName.substring(fileName.lastIndexOf("."));
 		String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA).format(new Date());
 		
