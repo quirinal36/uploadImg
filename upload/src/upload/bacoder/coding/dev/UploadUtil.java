@@ -18,7 +18,7 @@ public class UploadUtil {
 	
 	public String setPhoto(String path, String imgEncodedStr, String fileName, int patientId) {
 		StringBuilder photoUrl = new StringBuilder();
-		photoUrl.append("http://upload.bacoder.kr/img/");
+		photoUrl.append("http://hsbong.synology.me:7070/upload/img/");
 		String ext = fileName.substring(fileName.lastIndexOf("."));
 		String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA).format(new Date());
 		
@@ -53,7 +53,7 @@ public class UploadUtil {
 			File file = new File(path + File.separator + timeStamp + ext);
 			FileOutputStream imageOutFile = new FileOutputStream(file);
 			imageOutFile.write(imageByteArray);
-			person.setPhoto("http://www.bacoder.kr/upload/" + file.getName());
+			person.setPhoto("http://hsbong.synology.me:7070/upload/" + file.getName());
 			imageOutFile.close();
 		} catch (FileNotFoundException fnfe) {
 			System.out.println("Image Path not found" + fnfe);
