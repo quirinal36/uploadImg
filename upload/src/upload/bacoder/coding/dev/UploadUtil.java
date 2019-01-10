@@ -21,13 +21,14 @@ public class UploadUtil {
 		photoUrl.append("http://hsbong.synology.me:7070/upload/img/");
 		String ext = fileName.substring(fileName.lastIndexOf("."));
 		String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA).format(new Date());
+		String pId = String.valueOf(patientId);
 		
 		File parentPath = new File(path);
 		if(!parentPath.exists()) {
 			parentPath.mkdirs();
 		}
 		// Write Image into File system - Make sure you update the path
-		File file = new File(path + File.separator + timeStamp + ext);
+		File file = new File(path + File.separator + pId + "_" + timeStamp + ext);
 		photoUrl.append(file.getName());
 		
 		try(FileOutputStream imageOutFile = new FileOutputStream(file)){
@@ -48,9 +49,10 @@ public class UploadUtil {
 			
 			String ext = fileName.substring(fileName.lastIndexOf("."));
 			String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA).format(new Date());
+			String name = person.getName();
 			
 			// Write Image into File system - Make sure you update the path
-			File file = new File(path + File.separator + timeStamp + ext);
+			File file = new File(path + File.separator + name + "_" + timeStamp + ext);
 			FileOutputStream imageOutFile = new FileOutputStream(file);
 			imageOutFile.write(imageByteArray);
 			person.setPhoto("http://hsbong.synology.me:7070/upload/" + file.getName());
