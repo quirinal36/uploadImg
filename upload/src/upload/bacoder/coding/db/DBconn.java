@@ -17,12 +17,12 @@ import upload.bacoder.coding.bean.Photo;
 public class DBconn {
 	Logger logger = Logger.getLogger(DBconn.class.getSimpleName());
 	
-	private String userName 	= "dev";
-	private String password 	= "789gagul";
+	private String userName 	= "pps";
+	private String password 	= "qhdghkdtp31!";
 	private String dbms 		= "mysql";
 	private String dbName 		= "new_schema";
-	private String serverName 	= "35.234.23.104";
-	private int portNumber 		= 3306;
+	private String serverName 	= "hsbong.synology.me";
+	private int portNumber 		= 3307;
 	
 	public Connection getConnection() throws SQLException {
 		try {
@@ -91,8 +91,8 @@ public class DBconn {
 		int result = 0;
 		try(Connection conn = getConnection()){
 			String sql = "INSERT INTO PhotoInfo "
-					+ "(patientId, photoUrl, classification, doctor, date, uploader, comment, accessLv) "
-					+ "VALUES (?,?,?,?,?,?,?,?)";
+					+ "(patientId, photoUrl, classification, doctor, date, uploader, comment, accessLv, sync) "
+					+ "VALUES (?,?,?,?,?,?,?,?,?)";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, photoInfo.getPatientId());			
@@ -103,6 +103,8 @@ public class DBconn {
 			pstmt.setString(6, photoInfo.getUploader());
 			pstmt.setString(7, photoInfo.getComment());
 			pstmt.setInt(8, photoInfo.getAccessLv());
+			pstmt.setInt(9, 1);
+
 			result= pstmt.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
