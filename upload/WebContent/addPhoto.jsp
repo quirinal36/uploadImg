@@ -9,7 +9,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%
-	final String path = getServletContext().getRealPath("/img");
+	//final String path = getServletContext().getRealPath("/storage");
+	final String path = "/volume1/@appstore/Tomcat7/src/webapps/storage";
 	Logger logger = Logger.getLogger("addPhoto.jsp");
 	
 	String imgEncodedStr = request.getParameter("image");
