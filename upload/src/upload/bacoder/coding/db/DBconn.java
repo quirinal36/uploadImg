@@ -103,7 +103,7 @@ public class DBconn {
 			pstmt.setString(6, photoInfo.getUploader());
 			pstmt.setString(7, photoInfo.getComment());
 			pstmt.setInt(8, photoInfo.getAccessLv());
-			pstmt.setInt(9, 1);
+			pstmt.setInt(9, 2);  //sync
 
 			result= pstmt.executeUpdate();
 		}catch (SQLException e) {
