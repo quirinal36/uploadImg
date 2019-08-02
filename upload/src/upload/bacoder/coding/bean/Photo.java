@@ -18,6 +18,11 @@ public class Photo {
     private String uploader;
     private String comment;
     private int accessLv;
+    private int size;
+    private String thumbnailFilename;
+    private int thumbnailSize;
+    private int sync;
+    
 	public int getPhotoId() {
 		return photoId;
 	}
@@ -84,6 +89,31 @@ public class Photo {
 	public void setAccessLv(String accessLv) {
 		setAccessLv(Integer.parseInt(accessLv));
 	}
+	public int getSize() {
+		return size;
+	}
+	public void setSize(int size) {
+		this.size = size;
+	}
+	public String getThumbnailFilename() {
+		return thumbnailFilename;
+	}
+	public void setThumbnailFilename(String thumbnailFilename) {
+		this.thumbnailFilename = thumbnailFilename;
+	}
+	public int getThumbnailSize() {
+		return thumbnailSize;
+	}
+	public void setThumbnailSize(int thumbnailSize) {
+		this.thumbnailSize = thumbnailSize;
+	}
+	public int getSync() {
+		return sync;
+	}
+	public void setSync(int sync) {
+		this.sync = sync;
+	}
+	
 	public static Photo makePhoto(ResultSet rs) throws SQLException {
 		Photo result = new Photo();
 		result.setAccessLv(rs.getInt("accessLv"));

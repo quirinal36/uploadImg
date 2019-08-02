@@ -22,6 +22,7 @@
 	String uploader = request.getParameter("uploader");
 	String comment = request.getParameter("comment");
 	String accessLv = request.getParameter("accessLv");
+	String sync = request.getParameter("sync");
 	
 	String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA).format(new Date());
 	
@@ -40,13 +41,26 @@
 	if(accessLv != null){
 		photoInfo.setAccessLv(accessLv);
 	}
+	if(sync == null){
+		photoInfo.setSync(2);
+	}
 	
 	JSONObject json = new JSONObject();
-	String imgUrl = new String();
+	String result = new String();
 	if (imgEncodedStr != null) {
-		imgUrl = new UploadUtil().setPhoto(path, imgEncodedStr, fileName, photoInfo.getPatientId());
+		result = new UploadUtil().setPhoto(path, imgEncodedStr, fileName, photoInfo.getPatientId());
 	}
+	logger.info("result : " + result);
+	
+	String imgUrl = result.split(";")[0];
+	String thumbnailUrl = result.split(";")[1];
+    int fileSize = Integer.parseInt(result.split(";")[2]);
+    int thumbnailSize = Integer.parseInt(result.split(";")[3]);
+
 	photoInfo.setPhotoUrl(imgUrl);
+	photoInfo.setThumbnailFilename(thumbnailUrl);
+	photoInfo.setSize(fileSize);
+	photoInfo.setThumbnailSize(thumbnailSize);
 	
 	DBconn dbconn = new DBconn();
 	
