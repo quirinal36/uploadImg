@@ -56,24 +56,28 @@ public class UploadUtil {
 			e.printStackTrace();
 		}
 		
-		try {
-			BufferedImage thumbnail = Scalr.resize(ImageIO.read(file), Scalr.Method.QUALITY, 400, 300); 
-		//	BufferedImage thumbnail = Scalr.resize(ImageIO.read(file), 290);
-            File thumbnailFile = new File(thumbnailFilename);
-            ImageIO.write(thumbnail, "jpg", thumbnailFile);
-            
-            thumbnailUrl = pId + "/" + thumbnailFile.getName().toString();
-            thumbnailSize = (int)thumbnailFile.length();
+//		try {
+//			logger.info("thumbnail image resize");
+//			BufferedImage thumbnail = Scalr.resize(ImageIO.read(file), Scalr.Method.QUALITY, 400, 300); 
+//		//	BufferedImage thumbnail = Scalr.resize(ImageIO.read(file), 290);
+//			logger.info("thumbnail File obj");
+//            File thumbnailFile = new File(thumbnailFilename);
+//            logger.info("thumbnail write");
+//            ImageIO.write(thumbnail, "jpg", thumbnailFile);
+//            
+//            thumbnailUrl = pId + "/" + thumbnailFile.getName().toString();
+//            thumbnailSize = (int)thumbnailFile.length();
 //		}catch(FileNotFoundException e) {
 //			e.printStackTrace();
 //		}catch(IOException e) {
 //			e.printStackTrace();
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//		}
 		logger.info(photoUrl.toString());
 		
 		return pId + "/" + photoUrl.toString() + ";" + thumbnailUrl + ";" + fileSize + ";" + thumbnailSize;
+
 	}
 	
 //	public String makeThumbnail(int thumbnail_height){ //높이 비율로 가로를 조정

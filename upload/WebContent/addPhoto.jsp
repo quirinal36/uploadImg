@@ -10,7 +10,9 @@
 
 <%
 	//final String path = getServletContext().getRealPath("/storage");
-	final String path = "/volume1/@appstore/Tomcat7/src/webapps/storage";
+	//final String path = "/volume1/@appstore/Tomcat7/src/webapps/storage";
+	final String path = "/home/phbong31/storage";
+
 	Logger logger = Logger.getLogger("addPhoto.jsp");
 	
 	String imgEncodedStr = request.getParameter("image");
@@ -60,6 +62,9 @@
 	photoInfo.setPhotoUrl(imgUrl);
 	photoInfo.setThumbnailFilename(thumbnailUrl);
 	photoInfo.setSize(fileSize);
+	if(thumbnailUrl != null && thumbnailUrl.length() > 0){
+		photoInfo.setThumbnailFilename(thumbnailUrl);
+	}
 	photoInfo.setThumbnailSize(thumbnailSize);
 	
 	DBconn dbconn = new DBconn();

@@ -22,6 +22,7 @@ public class Photo {
     private String thumbnailFilename;
     private int thumbnailSize;
     private int sync;
+    private String contentType;
     
 	public int getPhotoId() {
 		return photoId;
@@ -112,6 +113,12 @@ public class Photo {
 	}
 	public void setSync(int sync) {
 		this.sync = sync;
+	}
+	public String getContentType() {
+		return contentType;
+	}
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 	
 	public static Photo makePhoto(ResultSet rs) throws SQLException {

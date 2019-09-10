@@ -91,8 +91,8 @@ public class DBconn {
 		int result = 0;
 		try(Connection conn = getConnection()){
 			String sql = "INSERT INTO PhotoInfo "
-					+ "(patientId, photoUrl, classification, doctor, date, uploader, comment, accessLv, sync, thumbnailFilename, size, thumbnailSize) "
-					+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+					+ "(patientId, photoUrl, classification, doctor, date, uploader, comment, accessLv, sync, thumbnailFilename, size, thumbnailSize, contentType) "
+					+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, photoInfo.getPatientId());			
@@ -107,7 +107,12 @@ public class DBconn {
 			pstmt.setString(10, photoInfo.getThumbnailFilename());
 			pstmt.setInt(11, photoInfo.getSize());
 			pstmt.setInt(12, photoInfo.getThumbnailSize());
-
+			if(photoInfo.getContentType() != null && photoInfo.getContentType().length() > 0) {
+				pstmt.setString(13, photoInfo.getContentType());
+			} else {
+				pstmt.setString(13, "image/JPEG");
+			}
+			
 			result= pstmt.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
