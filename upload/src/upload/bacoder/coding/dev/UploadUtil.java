@@ -58,8 +58,8 @@ public class UploadUtil {
 		
 //		try {
 //			logger.info("thumbnail image resize");
-//			BufferedImage thumbnail = Scalr.resize(ImageIO.read(file), Scalr.Method.QUALITY, 400, 300); 
-//		//	BufferedImage thumbnail = Scalr.resize(ImageIO.read(file), 290);
+//			//BufferedImage thumbnail = Scalr.resize(ImageIO.read(file), Scalr.Method.QUALITY, 400, 300); 
+//			BufferedImage thumbnail = Scalr.resize(ImageIO.read(file), 290);
 //			logger.info("thumbnail File obj");
 //            File thumbnailFile = new File(thumbnailFilename);
 //            logger.info("thumbnail write");
@@ -67,10 +67,6 @@ public class UploadUtil {
 //            
 //            thumbnailUrl = pId + "/" + thumbnailFile.getName().toString();
 //            thumbnailSize = (int)thumbnailFile.length();
-//		}catch(FileNotFoundException e) {
-//			e.printStackTrace();
-//		}catch(IOException e) {
-//			e.printStackTrace();
 //		}catch(Exception e) {
 //			e.printStackTrace();
 //		}
