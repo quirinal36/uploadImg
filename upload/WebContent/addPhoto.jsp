@@ -49,6 +49,7 @@
 	
 	JSONObject json = new JSONObject();
 	String result = new String();
+	//logger.info("##########imgEncodedStr: "+ imgEncodedStr);
 	if (imgEncodedStr != null) {
 		result = new UploadUtil().setPhoto(path, imgEncodedStr, fileName, photoInfo.getPatientId());
 	}

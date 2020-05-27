@@ -94,7 +94,7 @@ public class DBconn {
 					+ "(patientId, photoUrl, classification, doctor, date, uploader, comment, accessLv, sync, thumbnailFilename, size, thumbnailSize, contentType) "
 					+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			
-			PreparedStatement pstmt = conn.prepareStatement(sql);
+			PreparedStatement pstmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			pstmt.setInt(1, photoInfo.getPatientId());			
 			pstmt.setString(2, photoInfo.getPhotoUrl());
 			pstmt.setString(3, photoInfo.getClassification());
@@ -114,6 +114,15 @@ public class DBconn {
 			}
 			
 			result= pstmt.executeUpdate();
+			ResultSet rs = pstmt.getGeneratedKeys();
+			if (rs.next()) {
+		        result = rs.getInt(1);
+		    } else {
+		    	result = -2;
+		        // throw an exception from here
+		    }
+			logger.info("addPhoto.jsp photoId result:"+ result);
+			
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
