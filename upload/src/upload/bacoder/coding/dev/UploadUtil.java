@@ -75,7 +75,60 @@ public class UploadUtil {
 		return pId + "/" + photoUrl.toString() + ";" + thumbnailUrl + ";" + fileSize + ";" + thumbnailSize;
 
 	}
-	
+	public String setProfilePhoto(String path, String imgEncodedStr, String fileName, int userId) {
+		StringBuilder photoUrl = new StringBuilder();
+		//photoUrl.append("http://hsbong.synology.me:7070/upload/img/");
+		String ext = fileName.substring(fileName.lastIndexOf("."));
+		String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA).format(new Date());
+		
+		File parentPath = new File(path);
+		if(!parentPath.exists()) {
+			parentPath.mkdirs();
+		}
+		// Write Image into File system - Make sure you update the path
+		File file = new File(path + "/" + userId + "_" + timeStamp + ext);
+		photoUrl.append(file.getName());
+//		String thumbnailBase = parentPath.getAbsolutePath() + "/" + pId + "_" + timeStamp;
+		
+		int fileSize = 0;
+//		int thumbnailSize = 0;
+//		String thumbnailFilename = thumbnailBase + "-thumbnail.JPG";
+//		String thumbnailUrl = "";
+		
+//		logger.info("thumbnailFilename : "+ thumbnailFilename);
+		
+		try(FileOutputStream imageOutFile = new FileOutputStream(file)){
+			byte[] imageByteArray = Base64.decodeBase64(imgEncodedStr); 
+			imageOutFile.write(imageByteArray);	
+			fileSize = (int)file.length();
+			imageOutFile.close();
+		}catch(FileNotFoundException e) {
+			e.printStackTrace();
+		}catch(IOException e) {
+			e.printStackTrace();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+//		try {
+//			logger.info("thumbnail image resize");
+//			//BufferedImage thumbnail = Scalr.resize(ImageIO.read(file), Scalr.Method.QUALITY, 400, 300); 
+//			BufferedImage thumbnail = Scalr.resize(ImageIO.read(file), 290);
+//			logger.info("thumbnail File obj");
+//            File thumbnailFile = new File(thumbnailFilename);
+//            logger.info("thumbnail write");
+//            ImageIO.write(thumbnail, "jpg", thumbnailFile);
+//            
+//            thumbnailUrl = pId + "/" + thumbnailFile.getName().toString();
+//            thumbnailSize = (int)thumbnailFile.length();
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//		}
+		logger.info(photoUrl.toString());
+		
+		return photoUrl.toString() + ";" + fileSize;
+
+	}
 //	public String makeThumbnail(int thumbnail_height){ //높이 비율로 가로를 조정
 //		   String thumbnailName = null;
 //		  

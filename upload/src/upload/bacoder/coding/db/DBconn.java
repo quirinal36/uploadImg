@@ -11,11 +11,13 @@ import java.util.logging.Logger;
 
 import org.json.simple.JSONArray;
 
+import upload.bacoder.coding.db.DBconn;
 import upload.bacoder.coding.bean.Person;
 import upload.bacoder.coding.bean.Photo;
 
 public class DBconn {
-	Logger logger = Logger.getLogger(DBconn.class.getSimpleName());
+	protected Logger logger = Logger.getLogger(DBconn.class.getSimpleName());
+	protected String errorMsg;
 	
 	private String userName 	= "pps";
 	private String password 	= "qhdghkdtp31!";
@@ -47,6 +49,25 @@ public class DBconn {
 	    return conn;
 	}
 	
+	protected boolean hasString(String input) {
+		if(input!=null && input.length()>0) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	protected void appendSql(StringBuilder sql, String key) {
+		sql.append(key).append("=?,");
+	}
+
+	public String getErrorMsg() {
+		return errorMsg;
+	}
+
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg = errorMsg;
+	}
 	
 	public int updatePerson(Person person) {
 		int result = 0;
@@ -128,6 +149,7 @@ public class DBconn {
 		}
 		return result;
 	}
+	
 	public JSONArray getPhotos(Photo photo) {
 		JSONArray result = new JSONArray();
 		try(Connection conn = getConnection()){
