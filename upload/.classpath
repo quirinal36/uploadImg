@@ -18,5 +18,7 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/json-simple-1.1.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mysql-connector-java-5.1.46-bin.jar"/>
 	<classpathentry kind="lib" path="lib/imgscalr-lib-4.2.jar" sourcepath="/Users/bonghwangse/.m2/repository/org/imgscalr/imgscalr-lib/4.2/imgscalr-lib-4.2-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/dev/Downloads/jjwt-0.9.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/dev/Downloads/spring-security-crypto-5.3.2.RELEASE.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
