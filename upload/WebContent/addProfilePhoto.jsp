@@ -25,13 +25,15 @@
 	String token = request.getHeader("authorization");
 	String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA).format(new Date());
 	
+	logger.info("token: "+token);
 	Photo photoInfo = new Photo();
+	try {
 	TokenControl control = new TokenControl();
-	
+		
 	if(token != null && token.length()>0 && imgEncodedStr != null 
 			&& imgEncodedStr.length() > 0) {
 		Person person = control.getPersonByToken(token);
-	
+		logger.info("getUserLevel: "+person.getUserLevel());
 		if(person.getUserLevel() > 0) {		
 			photoInfo.setDate(timeStamp);
 			photoInfo.setUploader("addProfilePhoto");
@@ -66,7 +68,9 @@
 	} else {
 		//token not found
 	}
-	
+	} catch(Exception e) {
+		throw e;
+	}
 	
 	
 %>
