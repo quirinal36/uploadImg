@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -75,10 +76,10 @@ public class UploadUtil {
 		return pId + "/" + photoUrl.toString() + ";" + thumbnailUrl + ";" + fileSize + ";" + thumbnailSize;
 
 	}
-	public String setProfilePhoto(String path, String imgEncodedStr, String fileName, int userId) {
+	public String setProfilePhoto(String path, String imgEncodedStr, String fileExt, int userId) {
 		StringBuilder photoUrl = new StringBuilder();
 		//photoUrl.append("http://hsbong.synology.me:7070/upload/img/");
-		String ext = fileName.substring(fileName.lastIndexOf("."));
+//		String ext = fileName.substring(fileName.lastIndexOf("."));
 		String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA).format(new Date());
 		
 		File parentPath = new File(path);
@@ -86,7 +87,7 @@ public class UploadUtil {
 			parentPath.mkdirs();
 		}
 		// Write Image into File system - Make sure you update the path
-		File file = new File(path + "/" + userId + "_" + timeStamp + ext);
+		File file = new File(path + "/" + userId + "_" + timeStamp + "." + fileExt);
 		photoUrl.append(file.getName());
 //		String thumbnailBase = parentPath.getAbsolutePath() + "/" + pId + "_" + timeStamp;
 		
@@ -128,6 +129,19 @@ public class UploadUtil {
 		
 		return photoUrl.toString() + ";" + fileSize;
 
+	}
+	private static String getRandomString(int length)
+	{
+	  StringBuffer buffer = new StringBuffer();
+	  Random random = new Random();
+	 
+	  String chars[] = "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z".split(",");
+	 
+	  for (int i=0 ; i<length ; i++)
+	  {
+	    buffer.append(chars[random.nextInt(chars.length)]);
+	  }
+	  return buffer.toString();
 	}
 //	public String makeThumbnail(int thumbnail_height){ //높이 비율로 가로를 조정
 //		   String thumbnailName = null;

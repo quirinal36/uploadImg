@@ -11,7 +11,6 @@ import upload.bacoder.coding.db.DBconn;
 import upload.bacoder.coding.bean.Person;
 import upload.bacoder.coding.bean.Token;
 import upload.bacoder.coding.dev.BongPasswordEncoder;
-import upload.bacoder.coding.dev.SecurityUtil;
 import upload.bacoder.coding.dev.TokenUtil;
 
 public class TokenControl extends DBconn {

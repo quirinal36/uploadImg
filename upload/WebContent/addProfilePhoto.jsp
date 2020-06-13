@@ -1,6 +1,5 @@
 <%@page import="org.json.simple.JSONObject"%>
 <%@page import="upload.bacoder.coding.control.TokenControl"%>
-
 <%@page import="upload.bacoder.coding.dev.UploadUtil"%>
 <%@page import="upload.bacoder.coding.db.DBconn"%>
 <%@page import="upload.bacoder.coding.bean.Photo"%>
@@ -21,11 +20,13 @@
 	Logger logger = Logger.getLogger("addProfilePhoto.jsp");
 	
 	String imgEncodedStr = request.getParameter("image");
-	String fileName = request.getParameter("fileName");
+	String fileExt = request.getParameter("fileExt");
 	String token = request.getHeader("authorization");
 	String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA).format(new Date());
 	
+	//logger.info("image: "+imgEncodedStr);
 	logger.info("token: "+token);
+	logger.info("fileExt: "+fileExt);
 	Photo photoInfo = new Photo();
 	try {
 	TokenControl control = new TokenControl();
@@ -44,7 +45,7 @@
 			String result = new String();
 			//logger.info("##########imgEncodedStr: "+ imgEncodedStr);
 			if (imgEncodedStr != null) {
-				result = new UploadUtil().setProfilePhoto(path, imgEncodedStr, fileName, person.getUserLevel());
+				result = new UploadUtil().setProfilePhoto(path, imgEncodedStr, fileExt, person.getUserLevel());
 			}
 			logger.info("result : " + result);
 			
@@ -66,6 +67,8 @@
 			//userLevel error
 		}
 	} else {
+		logger.info("token or img param null");
+	
 		//token not found
 	}
 	} catch(Exception e) {
