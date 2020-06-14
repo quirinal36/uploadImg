@@ -26,54 +26,54 @@ public class TokenControl extends DBconn {
 	public final static String expiredToken = "유효기간이 만료되었습니다";
 	public final static String unauthorized = "인가되지 않은 접근입니다";
 
-	PasswordEncoder passwordEncoder = new BongPasswordEncoder();
-	
-	public Person userValid(Person person)  {
-
-//		SecurityUtil security = new SecurityUtil();
-//		String ePwd = security.encryptSHA256(person.getPassword());	
-		try(Connection conn =  getConnection()){
-			String sql = "SELECT * FROM Person WHERE uniqueId = ?";
-			
-			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, person.getUniqueId());
-			
-			logger.info(pstmt.toString());			
-			
-			ResultSet rs = pstmt.executeQuery();
-			if(rs.next()) {
-				logger.info("pwd check success : " + rs.getString("uniqueId"));
-//				person.setAddress(rs.getString(Person.ADDRESS_KEY));
-//				person.setAge(rs.getInt(Person.AGE_KEY));
-//				person.setBirth(rs.getString(Person.BIRTH_KEY));
-				person.setDepartment(rs.getString(Person.DEPARTMENT_KEY));
-//				person.setEmail(rs.getString(Person.EMAIL_KEY));
-				person.setId(rs.getInt(Person.NUM_KEY));
-//				person.setName(rs.getString(Person.NAME_KEY));
-//				person.setPhone(rs.getString(Person.PHONE_KEY));
-//				person.setPhoto(rs.getString(Person.PHOTO_KEY));
-				person.setUniqueId(rs.getString(Person.UNIQUE_ID_KEY));
-				person.setUserLevel(rs.getInt(Person.USER_LEVEL_KEY));
-				person.setrToken(rs.getString(Person.R_TOKEN_KEY));
-				
-				if(passwordEncoder.matches(person.getPassword(), rs.getString(Person.PASSWORD_KEY))) {
-					return person;
-				} else {
-					logger.info("pwd check failed");
-					return null;
-				}
-					
-			} else {
-				logger.info("user not found");
-				return null;
-			}
-
-		}catch (SQLException e) {
-			e.printStackTrace();
-			setErrorMsg(e.getMessage());
-			return null;
-		}
-	}
+//	PasswordEncoder passwordEncoder = new BongPasswordEncoder();
+//	
+//	public Person userValid(Person person)  {
+//
+////		SecurityUtil security = new SecurityUtil();
+////		String ePwd = security.encryptSHA256(person.getPassword());	
+//		try(Connection conn =  getConnection()){
+//			String sql = "SELECT * FROM Person WHERE uniqueId = ?";
+//			
+//			PreparedStatement pstmt = conn.prepareStatement(sql);
+//			pstmt.setString(1, person.getUniqueId());
+//			
+//			logger.info(pstmt.toString());			
+//			
+//			ResultSet rs = pstmt.executeQuery();
+//			if(rs.next()) {
+//				logger.info("pwd check success : " + rs.getString("uniqueId"));
+////				person.setAddress(rs.getString(Person.ADDRESS_KEY));
+////				person.setAge(rs.getInt(Person.AGE_KEY));
+////				person.setBirth(rs.getString(Person.BIRTH_KEY));
+//				person.setDepartment(rs.getString(Person.DEPARTMENT_KEY));
+////				person.setEmail(rs.getString(Person.EMAIL_KEY));
+//				person.setId(rs.getInt(Person.NUM_KEY));
+////				person.setName(rs.getString(Person.NAME_KEY));
+////				person.setPhone(rs.getString(Person.PHONE_KEY));
+////				person.setPhoto(rs.getString(Person.PHOTO_KEY));
+//				person.setUniqueId(rs.getString(Person.UNIQUE_ID_KEY));
+//				person.setUserLevel(rs.getInt(Person.USER_LEVEL_KEY));
+//				person.setrToken(rs.getString(Person.R_TOKEN_KEY));
+//				
+//				if(passwordEncoder.matches(person.getPassword(), rs.getString(Person.PASSWORD_KEY))) {
+//					return person;
+//				} else {
+//					logger.info("pwd check failed");
+//					return null;
+//				}
+//					
+//			} else {
+//				logger.info("user not found");
+//				return null;
+//			}
+//
+//		}catch (SQLException e) {
+//			e.printStackTrace();
+//			setErrorMsg(e.getMessage());
+//			return null;
+//		}
+//	}
 	
 	public Person userValidFromLogin(Person person)  {
 
@@ -120,68 +120,68 @@ public class TokenControl extends DBconn {
 	}
 	
 	//userLv=0
-	public String getPhotoToken(Token token) {
-		Person person = new Person();
-		person.setUniqueId(token.getUserId());
-		person.setPassword(token.getUserPwd());
-		String scope = "";
-		int expMin = 0;
-		if(token.getScope() != null) {
-			scope = token.getScope();
-		} 
-		if(token.getExpMin() == 0) {
-			expMin = PhotoTokenEXPMins;
-		} else {
-			expMin = token.getExpMin();
-		}
-		if(userValid(person) != null) {
-			TokenUtil util = new TokenUtil();
-			return util.getToken(PTokenSubject, person.getUniqueId(), 0, PhotoTokenEXPMins, scope);
-		} else {
-			return null;
-		}
-	}
-	
-	public String getAccessToken(Person person) {	
-		Person validPerson = new Person();
-		validPerson = userValid(person); 
-		
-		if(validPerson != null) {
-			int userLv = validPerson.getUserLevel();
-			String id = validPerson.getId()+"";
-			
-			logger.info("getAccessToken : "+ userLv);
-			
-			if(userLv > 0) {
-				TokenUtil util = new TokenUtil();
-				return util.getToken(ATokenSubject, id, userLv, AccessTokenEXPMins, "all");
-			} else {
-				return "0";
-			}	
-		} else {
-			return null;
-		}
-	}
-	
-	public String getRefreshToken(Person person) {
-		Person validPerson = new Person();
-		validPerson = userValid(person); 
-		
-		if(validPerson != null) {
-			int userLv = validPerson.getUserLevel();
-			
-			logger.info("getRefreshToken : "+ userLv);
-			
-			if(userLv > 0) {
-				TokenUtil util = new TokenUtil();
-				return util.getToken(RTokenSubject, validPerson.getUniqueId(), userLv, RefreshTokenEXPMins, "all");
-			} else {
-				return "0";
-			}	
-		} else {
-			return null;
-		}
-	}
+//	public String getPhotoToken(Token token) {
+//		Person person = new Person();
+//		person.setUniqueId(token.getUserId());
+//		person.setPassword(token.getUserPwd());
+//		String scope = "";
+//		int expMin = 0;
+//		if(token.getScope() != null) {
+//			scope = token.getScope();
+//		} 
+//		if(token.getExpMin() == 0) {
+//			expMin = PhotoTokenEXPMins;
+//		} else {
+//			expMin = token.getExpMin();
+//		}
+//		if(userValid(person) != null) {
+//			TokenUtil util = new TokenUtil();
+//			return util.getToken(PTokenSubject, person.getUniqueId(), 0, PhotoTokenEXPMins, scope);
+//		} else {
+//			return null;
+//		}
+//	}
+//	
+//	public String getAccessToken(Person person) {	
+//		Person validPerson = new Person();
+//		validPerson = userValid(person); 
+//		
+//		if(validPerson != null) {
+//			int userLv = validPerson.getUserLevel();
+//			String id = validPerson.getId()+"";
+//			
+//			logger.info("getAccessToken : "+ userLv);
+//			
+//			if(userLv > 0) {
+//				TokenUtil util = new TokenUtil();
+//				return util.getToken(ATokenSubject, id, userLv, AccessTokenEXPMins, "all");
+//			} else {
+//				return "0";
+//			}	
+//		} else {
+//			return null;
+//		}
+//	}
+//	
+//	public String getRefreshToken(Person person) {
+//		Person validPerson = new Person();
+//		validPerson = userValid(person); 
+//		
+//		if(validPerson != null) {
+//			int userLv = validPerson.getUserLevel();
+//			
+//			logger.info("getRefreshToken : "+ userLv);
+//			
+//			if(userLv > 0) {
+//				TokenUtil util = new TokenUtil();
+//				return util.getToken(RTokenSubject, validPerson.getUniqueId(), userLv, RefreshTokenEXPMins, "all");
+//			} else {
+//				return "0";
+//			}	
+//		} else {
+//			return null;
+//		}
+//	}
 	
 	public Person getTokenByLogin(Person person) {
 		Person validPerson = new Person();
@@ -254,7 +254,7 @@ public class TokenControl extends DBconn {
 			
 			try(Connection conn = new DBconn().getConnection()){
 				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Person WHERE NUM = ?");
-				pstmt.setString(1, uniqueId);
+				pstmt.setInt(1, Integer.parseInt(uniqueId));
 				
 				ResultSet rs = pstmt.executeQuery();
 				while(rs.next()){

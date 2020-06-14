@@ -164,7 +164,7 @@ public String getIdByToken(String tokenStr) {
 				       .parseClaimsJws(tokenStr).getBody();
 
 		   String uniqueId = claims.getId();
-//		    logger.info("getInfoByToken: authorized Token");
+		   logger.info("getIdByToken: "+ uniqueId);
 
 		   return uniqueId;
 		   
