@@ -73,13 +73,28 @@ public class DBconn {
 		int result = 0;
 		try(Connection conn = getConnection()){
 			String sql = "UPDATE Person "
-					+ "SET name=?,address=?,email=?,photo=? WHERE phone= ?";
+					+ "SET name=?,address=?,email=?,photoId=? WHERE phone= ?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, person.getName());
 			pstmt.setString(2, person.getAddress());
 			pstmt.setString(3, person.getEmail());
-			pstmt.setString(4, person.getPhoto());
+			pstmt.setInt(4, person.getPhotoId());
 			pstmt.setString(5, person.getPhone());
+			result= pstmt.executeUpdate();
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public int updatePersonPhotoId(Person person) {
+		int result = 0;
+		try(Connection conn = getConnection()){
+			String sql = "UPDATE Person "
+					+ "SET photoId=? WHERE NUM= ?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, person.getPhotoId());
+			pstmt.setInt(2, person.getId());
+
 			result= pstmt.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -90,7 +105,7 @@ public class DBconn {
 		int result = 0;
 		try(Connection conn = getConnection()){
 			String sql = "INSERT INTO Person "
-					+ "(name, email, phone, password, uniqueId, photo, department) "
+					+ "(name, email, phone, password, uniqueId, photoId, department) "
 					+ "VALUES (?,?,?,?,?,?,?)";
 			logger.info(sql.toString());
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -99,7 +114,7 @@ public class DBconn {
 			pstmt.setString(3, person.getPhone());
 			pstmt.setString(4, person.getPassword());
 			pstmt.setString(5, person.getUniqueId());
-			pstmt.setString(6, person.getPhoto());
+			pstmt.setInt(6, person.getPhotoId());
 			pstmt.setString(7, person.getDepartment());
 			result= pstmt.executeUpdate();
 		}catch (SQLException e) {

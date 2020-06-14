@@ -178,7 +178,7 @@ public class UploadUtil {
 			File file = new File(path + File.separator + name + "_" + timeStamp + ext);
 			FileOutputStream imageOutFile = new FileOutputStream(file);
 			imageOutFile.write(imageByteArray);
-			person.setPhoto("http://hsbong.synology.me:7070/upload/" + file.getName());
+//			person.setPhoto("http://hsbong.synology.me:7070/upload/" + file.getName());
 			imageOutFile.close();
 		} catch (FileNotFoundException fnfe) {
 			System.out.println("Image Path not found" + fnfe);

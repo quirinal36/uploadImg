@@ -31,8 +31,7 @@
 	try {
 	TokenControl control = new TokenControl();
 		
-	if(token != null && token.length()>0 && imgEncodedStr != null 
-			&& imgEncodedStr.length() > 0) {
+	if(token != null && token.length()>0 && imgEncodedStr != null && imgEncodedStr.length() > 0) {
 		Person person = control.getPersonByToken(token);
 		logger.info("getUserLevel: "+person.getUserLevel());
 		if(person.getUserLevel() > 0) {		
@@ -52,15 +51,19 @@
 			String imgUrl = result.split(";")[0];
 		    int fileSize = Integer.parseInt(result.split(";")[1]);
 	
-			photoInfo.setPhotoUrl(imgUrl);
+			photoInfo.setPhotoUrl("profileImg/"+imgUrl);
 			photoInfo.setSize(fileSize);
 			photoInfo.setContentType("image/JPEG");
 			photoInfo.setClassification("profile");
 	
 			DBconn dbconn = new DBconn();
+			int photoId = dbconn.addPhotoInfo(photoInfo);
 			
-			json.put("result", dbconn.addPhotoInfo(photoInfo));
-			
+			if(photoId > 0) {
+				person.setPhotoId(photoId);
+				dbconn.updatePersonPhotoId(person);
+			}
+			json.put("result", photoId);
 			out.print(json.toString());
 	
 		} else {
