@@ -4,9 +4,12 @@
 <%@page import="upload.bacoder.coding.bean.Photo"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.util.Locale"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="org.json.simple.JSONObject"%>
 <%@page import="org.json.simple.JSONArray"%>
+<%@page import="org.json.simple.parser.JSONParser"%>
+<%@page import="org.json.simple.parser.ParseException"%>
 
 <%@page import="java.util.logging.Logger"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -18,81 +21,68 @@
 
 	Logger logger = Logger.getLogger("addPhotos.jsp");
 	
-	String imgEncodedStr = request.getParameter("image");
-	String fileName = request.getParameter("filename");
-	String patientId = request.getParameter("patientId");
-	String patientName = request.getParameter("patientName");
-	String classification = request.getParameter("classification");
-	String doctor = request.getParameter("doctor");
-	String uploader = request.getParameter("uploader");
-	String comment = request.getParameter("comment");
-	String accessLv = request.getParameter("accessLv");
-	String sync = request.getParameter("sync");
-	
+   	String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA).format(new Date());
 	String jsonString = request.getParameter("attachment");
+	
+	String imgEncodedStr = "";
+	String fileName = "";
+	String classification = "";
+	String uploader = "";
 
+	ArrayList <Integer> idArray = new ArrayList<Integer>();
 	
-	String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA).format(new Date());
-	
-	
-	JSONArray mArray;
-
 	try {
-	       mArray = new JSONArray(jsonString);
-	       
-	    } catch (JSONException e) {
-	            e.printStackTrace();
-	    }
-	
-	JSONObject obj;
-	for (int i = 0; i < mArray.length; i ++){
-		obj = mArray.getJSONObject(i);
+		JSONParser jsonParser = new JSONParser();
+		JSONObject jsonObject = (JSONObject) jsonParser.parse(jsonString);
+		JSONArray jsonArray = (JSONArray) jsonObject.get("attachment");
+
+		for(int i = 0; i < jsonArray.size(); i++ ){
+			jsonObject = (JSONObject) jsonArray.get(i);
+	          
+	        imgEncodedStr = request.getParameter("encoded");
+			fileName = request.getParameter("fileName");
+			classification = request.getParameter("classification");
+			uploader = request.getParameter("uploader");
+		
+			
+			Photo photoInfo = new Photo();
+
+			photoInfo.setClassification(classification);
+			photoInfo.setDate(timeStamp);
+			photoInfo.setUploader(uploader);
+			photoInfo.setSync(2);
+			
+			String result = new String();
+			//logger.info("##########imgEncodedStr: "+ imgEncodedStr);
+			if (imgEncodedStr != null) {
+				result = new UploadUtil().setPhoto(path, imgEncodedStr, fileName, photoInfo.getPatientId());
+			}
+			logger.info("result : " + result);
+			
+			String imgUrl = result.split(";")[0];
+			String thumbnailUrl = result.split(";")[1];
+		    int fileSize = Integer.parseInt(result.split(";")[2]);
+		    int thumbnailSize = Integer.parseInt(result.split(";")[3]);
+
+			photoInfo.setPhotoUrl(imgUrl);
+			photoInfo.setThumbnailFilename(thumbnailUrl);
+			photoInfo.setSize(fileSize);
+			if(thumbnailUrl != null && thumbnailUrl.length() > 0){
+				photoInfo.setThumbnailFilename(thumbnailUrl);
+			}
+			photoInfo.setThumbnailSize(thumbnailSize);
+			
+			DBconn dbconn = new DBconn();
+			
+			idArray.add(dbconn.addPhotoInfo(photoInfo));
+		}
+	} catch (Exception e) {
 	}
 
+	JSONArray jsArray = new JSONArray(idArray);
 
-	Photo photoInfo = new Photo();
-	if(patientId != null){
-		photoInfo.setPatientId(patientId);
-	}
-	photoInfo.setPatientName(patientName);
-	photoInfo.setClassification(classification);
-	photoInfo.setDoctor(doctor);
-	photoInfo.setDate(timeStamp);
-	photoInfo.setUploader(uploader);
-	if(comment != null){
-		photoInfo.setComment(comment);
-	}
-	if(accessLv != null){
-		photoInfo.setAccessLv(accessLv);
-	}
-	if(sync == null){
-		photoInfo.setSync(2);
-	}
-	
 	JSONObject json = new JSONObject();
-	String result = new String();
-	//logger.info("##########imgEncodedStr: "+ imgEncodedStr);
-	if (imgEncodedStr != null) {
-		result = new UploadUtil().setPhoto(path, imgEncodedStr, fileName, photoInfo.getPatientId());
-	}
-	logger.info("result : " + result);
-	
-	String imgUrl = result.split(";")[0];
-	String thumbnailUrl = result.split(";")[1];
-    int fileSize = Integer.parseInt(result.split(";")[2]);
-    int thumbnailSize = Integer.parseInt(result.split(";")[3]);
-
-	photoInfo.setPhotoUrl(imgUrl);
-	photoInfo.setThumbnailFilename(thumbnailUrl);
-	photoInfo.setSize(fileSize);
-	if(thumbnailUrl != null && thumbnailUrl.length() > 0){
-		photoInfo.setThumbnailFilename(thumbnailUrl);
-	}
-	photoInfo.setThumbnailSize(thumbnailSize);
-	
-	DBconn dbconn = new DBconn();
-	
-	json.put("result", dbconn.addPhotoInfo(photoInfo));
+	json.put("result", jsArray);
 	
 	out.print(json.toString());
 %>
