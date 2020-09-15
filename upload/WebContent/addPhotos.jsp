@@ -1,15 +1,16 @@
-<%@page import="org.json.simple.JSONObject"%>
 <%@page import="upload.bacoder.coding.dev.UploadUtil"%>
 <%@page import="upload.bacoder.coding.db.DBconn"%>
 <%@page import="upload.bacoder.coding.bean.Photo"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.util.Locale"%>
+<%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="org.json.simple.JSONObject"%>
-<%@page import="org.json.simple.JSONArray"%>
-<%@page import="org.json.simple.parser.JSONParser"%>
-<%@page import="org.json.simple.parser.ParseException"%>
+<%@page import="org.json.JSONArray"%>
+<%@page import="org.json.JSONObject"%>
+<%@page import="org.json.JSONString"%>
+<%@page import="org.json.JSONException"%>
+
 
 <%@page import="java.util.logging.Logger"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -19,7 +20,7 @@
 	//final String path = "/volume1/@appstore/Tomcat7/src/webapps/storage";
 	final String path = "/home/phbong31/storage";
 
-	Logger logger = Logger.getLogger("addPhotos.jsp");
+	Logger logger = Logger.getLogger("##########addPhotos.jsp");
 	
    	String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA).format(new Date());
 	String jsonString = request.getParameter("attachment");
@@ -29,21 +30,23 @@
 	String classification = "";
 	String uploader = "";
 
-	ArrayList <Integer> idArray = new ArrayList<Integer>();
+	//logger.info("####param : " + jsonString);
+	
+	JSONArray jsArray = new JSONArray();
 	
 	try {
-		JSONParser jsonParser = new JSONParser();
-		JSONObject jsonObject = (JSONObject) jsonParser.parse(jsonString);
-		JSONArray jsonArray = (JSONArray) jsonObject.get("attachment");
-
-		for(int i = 0; i < jsonArray.size(); i++ ){
-			jsonObject = (JSONObject) jsonArray.get(i);
-	          
-	        imgEncodedStr = request.getParameter("encoded");
-			fileName = request.getParameter("fileName");
-			classification = request.getParameter("classification");
-			uploader = request.getParameter("uploader");
+		JSONArray jsonArray = new JSONArray(jsonString);
+		//logger.info("####befor iterator");
+		for(int i = 0; i < jsonArray.length(); i++ ){
+			JSONObject jsonObject = jsonArray.getJSONObject(i);
+			//logger.info("####jsonObj : " + jsonObject.toString());
+			
+	        imgEncodedStr = jsonObject.getString("encoded");
+			fileName = jsonObject.getString("fileName");
+			classification = jsonObject.getString("classification");
+			uploader = jsonObject.getString("uploader");
 		
+			//logger.info("####fileName : " + fileName);
 			
 			Photo photoInfo = new Photo();
 
@@ -57,7 +60,7 @@
 			if (imgEncodedStr != null) {
 				result = new UploadUtil().setPhoto(path, imgEncodedStr, fileName, photoInfo.getPatientId());
 			}
-			logger.info("result : " + result);
+			//logger.info("###result : " + result);
 			
 			String imgUrl = result.split(";")[0];
 			String thumbnailUrl = result.split(";")[1];
@@ -74,15 +77,15 @@
 			
 			DBconn dbconn = new DBconn();
 			
-			idArray.add(dbconn.addPhotoInfo(photoInfo));
+			jsArray.put(i, dbconn.addPhotoInfo(photoInfo));
+
 		}
 	} catch (Exception e) {
+		e.printStackTrace();
 	}
 
-	JSONArray jsArray = new JSONArray(idArray);
+	//logger.info("####end");
+	logger.info("###photoIdArray : " + jsArray.toString());
 
-	JSONObject json = new JSONObject();
-	json.put("result", jsArray);
-	
-	out.print(json.toString());
+	out.print(jsArray.toString());
 %>
