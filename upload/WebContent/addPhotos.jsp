@@ -20,11 +20,10 @@
 	//final String path = "/volume1/@appstore/Tomcat7/src/webapps/storage";
 	final String path = "/home/phbong31/storage";
 
-	Logger logger = Logger.getLogger("##########addPhotos.jsp");
+	Logger logger = Logger.getLogger("addPhotos.jsp");
 	
    	String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA).format(new Date());
 	String jsonString = request.getParameter("attachment");
-	
 	String imgEncodedStr = "";
 	String fileName = "";
 	String classification = "";
@@ -36,17 +35,17 @@
 	
 	try {
 		JSONArray jsonArray = new JSONArray(jsonString);
-		//logger.info("####befor iterator");
+		//logger.info("####before iterator");
 		for(int i = 0; i < jsonArray.length(); i++ ){
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
-			//logger.info("####jsonObj : " + jsonObject.toString());
+			//logger.info("####jsonObjLength : " + jsonObject.length());
 			
 	        imgEncodedStr = jsonObject.getString("encoded");
 			fileName = jsonObject.getString("fileName");
 			classification = jsonObject.getString("classification");
 			uploader = jsonObject.getString("uploader");
 		
-			//logger.info("####fileName : " + fileName);
+			logger.info("####fileName : " + fileName);
 			
 			Photo photoInfo = new Photo();
 
